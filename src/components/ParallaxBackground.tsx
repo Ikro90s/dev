@@ -1,11 +1,3 @@
-/**
- * ParallaxBackground Component
- * 
- * Professional parallax background with gradient effects similar to Lovable.
- * Creates depth with multiple animated layers.
- * 
- * @component
- */
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 

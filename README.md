@@ -50,17 +50,31 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+## Tecnologias Utilizadas
 
-This project is built with:
+Este projeto foi desenvolvido utilizando as seguintes tecnologias e bibliotecas:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Core Stack
+- **React**: Biblioteca base para construção da interface.
+- **TypeScript**: Superset JavaScript para tipagem estática e segurança de código.
+- **Vite**: Ferramenta de build e servidor de desenvolvimento de alta performance.
+- **Tailwind CSS**: Framework de estilização baseado em classes utilitárias.
 
-## How can I deploy this project?
+### Componentes e Estilização
+- **shadcn/ui**: Componentes de interface modulares e acessíveis baseados em Radix UI.
+- **Framer Motion**: Biblioteca para animações e transições de interface.
+- **Lucide React**: Conjunto de ícones vetoriais.
+- **Embla Carousel**: Motor de carrossel para exibição de projetos.
+
+### Bibliotecas de Suporte
+- **React Router DOM**: Gerenciamento de rotas e navegação.
+- **TanStack Query**: Gerenciamento de estado e requisições de dados.
+- **React Hook Form**: Gestão de formulários e validações.
+- **Zod**: Esquemas de validação de dados.
+- **Recharts**: Visualização de dados e gráficos.
+- **Sonner**: Sistema de notificações e toasts.
+
+## Como implantar este projeto?
 
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 

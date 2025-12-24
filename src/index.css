@@ -1,19 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lora&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
+    --font-sans: "Satoshi", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
     --background: 240 4% 95%;
     --foreground: 240 5% 10%;
-
     --card: 0 0% 98%;
     --card-foreground: 240 5% 10%;
 
@@ -69,11 +69,13 @@ All colors MUST be HSL.
 
     --sidebar: 0 0% 98%;
 
-    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 
-    --font-serif: Lora, ui-serif, Georgia, Cambria, Times New Roman, Times, serif;
+    --font-serif: "Instrument Serif", serif;
 
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+      Consolas, Liberation Mono, Courier New, monospace;
 
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
 
@@ -87,7 +89,8 @@ All colors MUST be HSL.
 
     --shadow-lg: 0px 1px 17.5px 0px hsla(0, 0%, 0%, 0.5);
 
-    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+      0 8px 10px -1px hsl(0 0% 0% / 0.1);
 
     --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
 
@@ -144,17 +147,183 @@ All colors MUST be HSL.
     --shadow: 0px 1px 3px 0px hsl(0, 0%, 0%);
     --shadow-md: 0px 1px 4.5px 0px hsl(0, 0%, 0%);
     --shadow-lg: 0px 1px 7.5px 0px hsl(0, 0%, 0%);
-    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+      0 8px 10px -1px hsl(0 0% 0% / 0.1);
     --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
+  html,
   body {
-    @apply bg-background text-foreground;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    cursor: none;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    cursor: none !important;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono font-light;
+    font-family: "JetBrains Mono", monospace;
   }
 }
+
+@layer utilities {
+  .text-primary {
+    text-shadow: 0 0 12px hsl(var(--primary) / 0.6);
+  }
+
+  svg.text-primary {
+    filter: drop-shadow(0 0 6px hsl(var(--primary) / 0.8));
+    text-shadow: none;
+  }
+
+  .bg-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  .border-primary {
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.4);
+  }
+
+  .group:hover .group-hover\:text-primary {
+    text-shadow: 0 0 15px hsl(var(--primary) / 0.8);
+  }
+
+  .group:hover .group-hover\:border-primary {
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.6);
+  }
+
+  .neon-btn {
+    --glow-color: hsl(var(--primary));
+    --glow-spread-color: hsl(var(--primary) / 0.7);
+    --enhanced-glow-color: hsl(var(--primary) / 0.9);
+    --btn-color: #1a0b2e;
+    border: .15em solid var(--glow-color);
+    padding: 1em 3em;
+    color: var(--glow-color);
+    font-size: 15px;
+    font-weight: bold;
+    background-color: var(--btn-color);
+    border-radius: 1em;
+    outline: none;
+    box-shadow: 0 0 1em .25em var(--glow-color),
+           0 0 4em 1em var(--glow-spread-color),
+           inset 0 0 .75em .25em var(--glow-color);
+    text-shadow: 0 0 .5em var(--glow-color);
+    position: relative;
+    transition: all 0.3s;
+    overflow: visible;
+  }
+
+  .neon-btn::after {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    top: 120%;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: var(--glow-spread-color);
+    filter: blur(2em);
+    opacity: .7;
+    transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+  }
+
+  .neon-btn:hover {
+    color: var(--btn-color);
+    background-color: var(--glow-color);
+    box-shadow: 0 0 1em .25em var(--glow-color),
+           0 0 4em 2em var(--glow-spread-color),
+           inset 0 0 .75em .25em var(--glow-color);
+  }
+
+  .neon-btn:active {
+    box-shadow: 0 0 0.6em .25em var(--glow-color),
+           0 0 2.5em 2em var(--glow-spread-color),
+           inset 0 0 .5em .25em var(--glow-color);
+  }
+
+  .neon-title {
+    --glow-color: hsl(var(--primary));
+    --glow-spread-color: hsl(var(--primary) / 0.4);
+    color: var(--glow-color);
+    text-shadow: 0 0 .5em var(--glow-color), 0 0 1em var(--glow-color);
+    position: relative;
+    display: inline-block;
+  }
+
+  .neon-title::after {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 10%;
+    right: 10%;
+    height: 120px;
+    background: linear-gradient(180deg, var(--glow-spread-color), transparent);
+    filter: blur(2.5rem);
+    opacity: 0.6;
+    z-index: -1;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .grain {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200%;
+    background: transparent url('http://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 9999;
+    animation: grain 8s steps(10) infinite;
+  }
+
+  @keyframes grain {
+    0%, 100% { transform:translate(0, 0) }
+    10% { transform:translate(-5%, -10%) }
+    20% { transform:translate(-15%, 5%) }
+    30% { transform:translate(7%, -25%) }
+    40% { transform:translate(-5%, 25%) }
+    50% { transform:translate(-15%, 10%) }
+    60% { transform:translate(15%, 0%) }
+    70% { transform:translate(0%, 15%) }
+    80% { transform:translate(3%, 35%) }
+    90% { transform:translate(-10%, 10%) }
+  }
+
+  .title-glow {
+    position: relative;
+    display: inline-block;
+  }
+
+  .title-glow::before {
+    content: "";
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle at center, hsl(var(--primary) / 0.15), transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+

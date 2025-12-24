@@ -1,35 +1,42 @@
-/**
- * Index Page - Portfolio Home
- * 
- * Main portfolio page that composes all sections together.
- * Implements a single-page layout with smooth scrolling navigation.
- * 
- * @page
- */
+import { Suspense, lazy } from "react";
 import { Header } from "@/components/Header";
-import { HeroSection } from "@/components/HeroSection";
-import { AboutSection } from "@/components/AboutSection";
-import { ProjectsCarousel } from "@/components/ProjectsCarousel";
-import { TechStack } from "@/components/TechStack";
-import { ContactSection } from "@/components/ContactSection";
-import { Footer } from "@/components/Footer";
 import { ParallaxBackground } from "@/components/ParallaxBackground";
+import { BackToTop } from "@/components/BackToTop";
 import { ThemeProvider } from "next-themes";
+
+// Lazy load heavy sections
+const HeroSection = lazy(() => import("@/components/HeroSection").then(m => ({ default: m.HeroSection })));
+const AboutSection = lazy(() => import("@/components/AboutSection").then(m => ({ default: m.AboutSection })));
+const ProjectsCarousel = lazy(() => import("@/components/ProjectsCarousel").then(m => ({ default: m.ProjectsCarousel })));
+const TechStack = lazy(() => import("@/components/TechStack").then(m => ({ default: m.TechStack })));
+const ContactSection = lazy(() => import("@/components/ContactSection").then(m => ({ default: m.ContactSection })));
 
 const Index = () => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <div className="min-h-screen bg-background">
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+      <div className="h-screen w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth relative">
         <ParallaxBackground />
         <Header />
-        <main>
-          <HeroSection />
-          <AboutSection />
-          <ProjectsCarousel />
-          <TechStack />
-          <ContactSection />
+        <main className="w-full relative">
+          <Suspense fallback={<div className="min-h-screen" />}>
+            <div className="relative z-[50]">
+              <HeroSection />
+            </div>
+            <div className="relative z-[40]">
+              <AboutSection />
+            </div>
+            <div className="relative z-[30]">
+              <ProjectsCarousel />
+            </div>
+            <div className="relative z-[20]">
+              <TechStack />
+            </div>
+            <div className="relative z-[10]">
+              <ContactSection />
+            </div>
+          </Suspense>
         </main>
-        <Footer />
+        <BackToTop />
       </div>
     </ThemeProvider>
   );

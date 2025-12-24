@@ -5,8 +5,12 @@
  * 
  * @component
  */
-import { Briefcase, GraduationCap, MapPin, Calendar } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { User, Briefcase, GraduationCap, MapPin, Calendar, Target, Globe } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Premium3DCard } from "@/components/ui/premium-3d-card";
 
 interface InfoItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -14,95 +18,67 @@ interface InfoItem {
   value: string;
 }
 
-const infoItems: InfoItem[] = [
-  { icon: Briefcase, label: "Experiência", value: "X+ anos" },
-  { icon: GraduationCap, label: "Formação", value: "Sua Formação" },
-  { icon: MapPin, label: "Localização", value: "Sua Cidade" },
-  { icon: Calendar, label: "Disponibilidade", value: "Freelance" },
-];
-
 export const AboutSection = () => {
+  const { t } = useLanguage();
+  
+  const infoItems: InfoItem[] = [
+    { icon: Briefcase, label: t.about.experience, value: t.about.experienceValue },
+    { icon: GraduationCap, label: t.about.education, value: t.about.educationValue },
+    { icon: MapPin, label: t.about.location, value: t.about.locationValue },
+    { icon: Calendar, label: t.about.availability, value: t.about.availabilityValue },
+    { icon: Target, label: t.about.focus, value: t.about.focusValue },
+    { icon: Globe, label: t.about.languages, value: t.about.languagesValue },
+  ];
   return (
-    <section id="about" className="py-24 bg-card/30">
+    <section 
+      id="about" 
+      className="min-h-screen py-24 md:py-24 relative overflow-visible flex items-center justify-center snap-start snap-always scroll-mt-0"
+    >
+      {/* Background decoration */}
+      <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-visible">
+        <div className="absolute top-1/4 left-[-20%] h-[600px] w-[600px] rounded-full bg-[#ad5389] opacity-03 blur-[120px] animate-blob" />
+        <div className="absolute bottom-1/4 right-[-20%] h-[600px] w-[600px] rounded-full bg-[#3c1053] opacity-06 blur-[120px] animate-blob animation-delay-4000" />
+      </div>
       <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-primary font-medium text-sm tracking-wider uppercase mb-4">
-              Sobre Mim
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Conheça um pouco{" "}
-              <span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">
-                da minha história
-              </span>
-            </h2>
-          </motion.div>
 
-          {/* Content */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Text */}
-            <motion.div 
-              className="space-y-6"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <p className="text-muted-foreground leading-relaxed">
-                Sou um desenvolvedor apaixonado por tecnologia e inovação. Minha jornada 
-                na programação começou há alguns anos e desde então venho me dedicando 
-                a criar soluções digitais elegantes e eficientes.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Acredito que um bom código vai além da funcionalidade — ele deve ser 
-                limpo, escalável e fácil de manter. Busco sempre aplicar as melhores 
-                práticas de desenvolvimento em todos os meus projetos.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Quando não estou codando, gosto de aprender novas tecnologias, 
-                contribuir para projetos open source e compartilhar conhecimento 
-                com a comunidade.
-              </p>
-            </motion.div>
-
-            {/* Info Cards */}
-            <div className="grid grid-cols-2 gap-4">
-              {infoItems.map((item, index) => (
-                <motion.div
-                  key={item.label}
-                  className="p-5 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 group"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <div className="flex flex-col gap-3">
-                    <motion.div 
-                      className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-accent-foreground/20 w-fit"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <item.icon className="h-5 w-5 text-primary" />
-                    </motion.div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                        {item.label}
-                      </p>
-                      <p className="font-semibold group-hover:text-primary transition-colors">
-                        {item.value}
-                      </p>
-                    </div>
+          {/* Info Cards - Clean and Focused Layout */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+            {infoItems.map((item, index) => (
+              <motion.div
+                key={item.label}
+                className="p-5 md:p-6 rounded-2xl bg-white/80 dark:bg-black/60 backdrop-blur-xl border border-white/20 hover:border-primary/30 transition-all duration-500 group overflow-hidden"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover="hover"
+                variants={{
+                  hover: { y: -8, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }
+                }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ delay: index * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="flex flex-col gap-3">
+                  <motion.div 
+                    className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-accent-foreground/20 w-fit"
+                    variants={{
+                      hover: { scale: 1.1, rotate: 12 }
+                    }}
+                    transition={{ type: "spring", stiffness: 100, damping: 15 }}
+                  >
+                    <item.icon className="h-5 w-5 text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
+                  </motion.div>
+                  <div>
+                    <p className="text-xs text-stone-500 uppercase tracking-wider">
+                      {item.label}
+                    </p>
+                    <p className="font-semibold text-stone-900 dark:text-white group-hover:text-primary transition-colors mt-1">
+                      {item.value}
+                    </p>
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

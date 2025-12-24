@@ -1,118 +1,104 @@
-/**
- * Header Component
- * 
- * Responsive navigation header with mobile sidebar support.
- * Uses hamburger menu on mobile devices that triggers a slide-in sidebar.
- * 
- * @component
- */
-import { useState } from "react";
-import { Menu, Home, Briefcase, Code, Mail, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigation, Section } from "@/contexts/NavigationContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { motion } from "framer-motion";
-
-interface NavItem {
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
-
-const navItems: NavItem[] = [
-  { label: "Início", href: "#home", icon: Home },
-  { label: "Sobre", href: "#about", icon: User },
-  { label: "Projetos", href: "#projects", icon: Briefcase },
-  { label: "Tecnologias", href: "#tech", icon: Code },
-  { label: "Contato", href: "#contact", icon: Mail },
-];
-
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { motion, AnimatePresence } from "framer-motion";
 export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { activeSection, setActiveSection } = useNavigation();
+  const { t } = useLanguage();
 
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-50% 0px",
+      threshold: 0
+    };
+
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id.toUpperCase() as Section;
+          setActiveSection(id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    const sections = ["home", "about", "projects", "tech", "contact"];
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [setActiveSection]);
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: "smooth" });
-    setIsOpen(false);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const sectionLabels: Record<string, string> = {
+    HOME: "IKRO90S",
+    ABOUT: t.nav.about,
+    PROJECTS: t.nav.projects,
+    TECH: t.skills.title,
+    CONTACT: t.nav.contact
   };
 
   return (
     <motion.header 
-      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border"
+      className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 py-6 md:py-8"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container mx-auto px-6 py-4">
-        <nav className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.a 
-            href="#home" 
-            className="text-xl font-bold bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Ikro90s
-          </motion.a>
+      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
+        {/* Logo */}
+        <motion.a 
+          href="#home"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection("#home");
+          }}
+          className="text-xl md:text-2xl font-medium text-primary relative tracking-tight font-serif italic"
+          whileHover={{ scale: 1.02 }}
+        >
+          Ikro90s
+        </motion.a>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-8">
-            {navItems.map((item, index) => (
-              <motion.li 
-                key={item.href}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <motion.button
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm font-medium"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item.label}
-                </motion.button>
-              </motion.li>
-            ))}
-          </ul>
+        {/* Center Display - Active Section */}
+        <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center pointer-events-none">
+          <AnimatePresence mode="wait">
+            <motion.span 
+              key={`${activeSection}-${t.nav.about}`} // Dependency on activeSection AND translations
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-[10px] md:text-xs font-extralight tracking-[0.6em] text-primary/60 uppercase"
+            >
+              {sectionLabels[activeSection] || activeSection}
+            </motion.span>
+          </AnimatePresence>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            
-            {/* Mobile Navigation */}
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild className="md:hidden">
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                  <Button variant="ghost" size="icon">
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </motion.div>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-72 bg-card">
-                <div className="flex flex-col gap-8 mt-8">
-                  <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">
-                    Menu
-                  </span>
-                  <ul className="flex flex-col gap-4">
-                    {navItems.map((item) => (
-                      <li key={item.href}>
-                        <motion.button
-                          onClick={() => scrollToSection(item.href)}
-                          className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors duration-300 text-base font-medium w-full p-3 rounded-lg hover:bg-accent"
-                          whileHover={{ scale: 1.05, x: 10 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <item.icon className="h-5 w-5" />
-                          {item.label}
-                        </motion.button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </SheetContent>
-            </Sheet>
+        <div className="flex items-center gap-12">
+          {/* Controls Symmetry */}
+          <div className="flex items-center gap-8 h-12">
+            <div className="flex items-center gap-6 h-full">
+              <div className="flex items-center justify-center h-full">
+                <LanguageToggle />
+              </div>
+              <div className="w-[1px] h-3 bg-primary/20" />
+              <div className="flex items-center justify-center h-full">
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
-        </nav>
+        </div>
       </div>
     </motion.header>
   );
